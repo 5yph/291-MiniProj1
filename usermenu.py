@@ -1,9 +1,9 @@
 import sqlite3
 import time
 
-global connection, cursor
-
 def userMenu(uid, con, cur):
+    global connection, cursor
+
     connection = con
     cursor = cur
 

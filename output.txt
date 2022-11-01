@@ -1,0 +1,65 @@
+
+----- Test songs
+SELECT songs.title
+FROM songs;
+Waka Waka(This Time For Africa)
+Applause
+Demons
+Counting Stars
+Wavin flag
+Just Give Me a Reason
+Stronger(What Doesn`t Kill You)
+We Are Young
+Moves Like Jagger
+Nice for what
+Hold on, we are going home
+DJ Got Us Fallin` in Love
+Wild Ones
+Everybody Talks
+Good Time
+Blame
+I Need Your Love
+Wake Me Up
+Poker Face
+Cheap Thrills
+No Lie
+Gentleman
+Titanium
+Cool Kids
+Chasing The Sun
+We Found Love
+Give Me Everything
+Come & Get It
+Me and My Broken Heart
+Best Day of My Life
+International Love
+You Make Me Feel...
+Safe and Sound
+Burn
+Shut Up and Dance
+Want to Want Me
+Dynamite
+Feel This Moment
+Hall of Fame
+On the Floor
+I Feel It Coming
+Blinding Lights
+My Heart Will Go On
+I`m Alive
+Complicated
+Club Can`t Handle Me
+Wannabe
+Shape of You
+Bad Company
+Bad Blood
+Peaches
+-----
+
+-- Test sessions
+SELECT *
+FROM sessions
+WHERE sessions.uid = "u1";
+u1|1|2021-09-23 12:15:02|2021-09-24 20:58:57
+u1|2|2022-02-23 21:17:32|2022-02-26 22:19:13
+u1|3|2022-09-23 11:22:33|2022-09-27 15:32:21
+u1|4|2022-11-01 13:05:31|2022-11-01 13:05:35
