@@ -159,8 +159,10 @@ def addSong(aid):
                     cursor.execute('INSERT INTO perform VALUES (?,?)', (new_artist_aid, new_sid))
                     connection.commit()
                     artists_who_perform.add(new_artist_aid.lower())
-                else:
+                elif (ans2 == '2'):
                     print("Not adding this artist...")
+                else:
+                    print("Invalid input, not adding...")
 
         elif (ans == '2'):
             break
