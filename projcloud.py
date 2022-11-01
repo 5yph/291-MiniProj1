@@ -172,10 +172,11 @@ def main():
 
         # More features past this point.
 
-        #User Menu
         if (x[0] == 1):
+            #User Menu
             userMenu(x[1], connection, cursor)
         elif (x[0] == 2):
+            # artist menu
             artistMenu(x[1], connection, cursor)
 
     connection.close()
