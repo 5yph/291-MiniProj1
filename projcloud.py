@@ -2,6 +2,7 @@ import sqlite3
 import sys
 from getpass import getpass
 from usermenu import userMenu
+from artistmenu import artistMenu
 
 import MySQLdb
 
@@ -174,8 +175,8 @@ def main():
         #User Menu
         if (x[0] == 1):
             userMenu(x[1], connection, cursor)
-        else:
-            print("")
+        elif (x[0] == 2):
+            artistMenu(x[1], connection, cursor)
 
     connection.close()
 
