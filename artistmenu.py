@@ -47,23 +47,60 @@ def addSong(aid):
     cursor.execute('SELECT MAX(sid) FROM songs;')
     highest_sid = cursor.fetchone()
 
-    print(highest_sid[0])
+    new_sid = highest_sid[0] + 1
 
     # ask for song title and duration
+    song_title = input("Enter song title: ")
+    song_dur = input("Enter song duration: ")
 
+    # check if song already exists
+    song_exist_query = '''
+                    SELECT songs.sid
+                    FROM songs, perform, artists
+                    WHERE perform.aid = artists.aid
+                    AND perform.sid = songs.sid
+                    AND artists.aid=?
+                    AND songs.title=?
+                    AND songs.duration=?;
+                '''
+    t = (aid, song_title, song_dur,)
+    cursor.execute(song_exist_query, t)
 
-    # fcheck if song already exists
+    song_exit_rows = cursor.fetchall()
+    print(song_exit_rows)
+    # if so, warn user and either reject it or confirm addition of new song
+    if len(song_exit_rows) > 0:
+        # row exists matching song description
+        print("Song already exists with sid: " + str(song_exit_rows[0][0]))
+        
+        print("Add song anyway?")
+        print("1: Yes")
+        print("2: No")
 
+        ans = input()
 
-    # add song
+        if (ans == '2'):
+            print("Not adding song...")
+            return
+        elif (ans != '1'):
+            print("Invalid selection, returning to menu")
+            return
 
+    # add song to songs table
+    cursor.execute('INSERT INTO songs VALUES (?,?,?)', (new_sid, song_title, song_dur))
+    connection.commit()
 
     # add perform
+    cursor.execute('INSERT INTO perform VALUES (?,?)', (aid, new_sid))
+    connection.commit()
 
+    print("Currently added song: " + song_title + " of duration " + str(song_dur) + " with id: " + str(new_sid))
+    print("Artist with aid: " + aid + " performs this song")
 
-    # ask for  other artists who may be involved
+    # ask for other artists who may be involved
+    print("Add additional artists who performed this song? (Only artists that exist in the database may be added)")
 
 
     # add those if it's the case
 
-    print("")
+    return
