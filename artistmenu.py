@@ -171,14 +171,14 @@ def addSong(aid):
 
 def findTopStats(aid):
 
-    # get top users
+    # get top 3 users who listen to artist by total duration
     get_top_fans_query = '''
                     SELECT l.uid, u.name
                     FROM listen l, songs s, perform p, users u
                     WHERE l.sid=s.sid 
                     AND s.sid=p.sid
                     AND u.uid = l.uid
-                    AND p.aid=?
+                    AND LOWER(p.aid)=?
                     group by l.uid
                     order by sum(l.cnt*s.duration) desc
                     limit 3;
@@ -192,15 +192,28 @@ def findTopStats(aid):
 
     print("Top fans:")
     for i, fan in enumerate(top_fans):
-        print("Fan #" + str(i+1) + ": " + fan[0] + " -- " + fan[1])
+        print("Fan #" + str(i+1) + ": " + str(fan[0]) + " -- " + str(fan[1]))
 
-    '''
-    for song in songs:
-        print(song[0]) 
-    '''
+    # get top 3 playlists that contain most of artists song
+    get_top_playlists_query = '''
+                            SELECT playlists.pid, playlists.title, COUNT(playlists.pid) AS pcnt
+                            FROM songs, plinclude, playlists, perform
+                            WHERE songs.sid = plinclude.sid
+                            AND playlists.pid = plinclude.pid
+                            AND songs.sid = perform.sid
+                            AND LOWER(perform.aid) =?
+                            GROUP BY playlists.pid
+                            ORDER BY pcnt DESC
+                            LIMIT 3;
+                            '''
+    t = (aid.lower(),)
+    cursor.execute(get_top_playlists_query, t)
 
-    # listen.cnt * songs.duration will return the total amount of time
-    # a user has listened to this song
+    # playlists is a list of tuples where the first index of each tuple is the pid
+    top_playlists = cursor.fetchall()
 
+    print("Top playlists:")
+    for i, playlist in enumerate(top_playlists):
+        print("Playlist #" + str(i+1) + ": " + str(playlist[0]) + " -- " + str(playlist[1]))
 
     return
