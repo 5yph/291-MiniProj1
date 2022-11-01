@@ -7,7 +7,7 @@ def artistMenu(aid, con, cur):
     cursor = cur
 
     print("")
-    print("Artists")
+    print("ARTISTS MENU")
     print("---------")
 
     t = (aid,)
@@ -50,8 +50,16 @@ def addSong(aid):
     new_sid = highest_sid[0] + 1
 
     # ask for song title and duration
-    song_title = input("Enter song title: ")
-    song_dur = input("Enter song duration: ")
+    song_title = input("Enter song title (string): ")
+    song_dur = input("Enter song duration (integer): ")
+
+    # check if duration is integer
+    if not song_dur.isdigit():
+        print("Error: duration is not an integer")
+        print("Exiting to menu...")
+
+    # account for case insensitivity -> turn everything lower case
+    song_title = song_title.lower()
 
     # check if song already exists
     song_exist_query = '''
@@ -97,10 +105,23 @@ def addSong(aid):
     print("Currently added song: " + song_title + " of duration " + str(song_dur) + " with id: " + str(new_sid))
     print("Artist with aid: " + aid + " performs this song")
 
-    # ask for other artists who may be involved
-    print("Add additional artists who performed this song? (Only artists that exist in the database may be added)")
+    while(1):
+        # ask for other artists who may be involved
+        print("Add additional artists who performed this song? (Only artists that exist in the database may be added)")
+        print("1: Yes")
+        print("2: No")
+
+        ans = input()
+
+        if (ans == '1'):
+            # add other artists
 
 
-    # add those if it's the case
+            print("")
+        elif (ans == '2'):
+            break
+        else:
+            print("Invalid selection, try again.")
+
 
     return

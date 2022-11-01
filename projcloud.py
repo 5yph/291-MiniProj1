@@ -21,14 +21,16 @@ def connect(path):
 def verifyID(id):
     global connection, cursor
 
+    # id passed is lower case, account for this in database
+
     # Get user id if exists
     id1 = (id,)
-    cursor.execute('SELECT uid FROM users WHERE uid=?;', id1)
+    cursor.execute('SELECT uid FROM users WHERE uid=LOWER(?);', id1)
     uid = cursor.fetchone()
     if (uid is None):
         uid = 0
     # Get artist id if exists
-    cursor.execute('SELECT aid FROM artists WHERE aid=?;', id1)
+    cursor.execute('SELECT aid FROM artists WHERE aid=LOWER(?);', id1)
     aid = cursor.fetchone()
     if (aid is None):
         aid = 0
@@ -52,13 +54,13 @@ def login(logintype, id, password):
 
     # Return 1 if the password is found, otherwise 0
     if (logintype == 1):
-        cursor.execute('SELECT uid FROM users WHERE uid=? AND pwd=?;', t)
+        cursor.execute('SELECT uid FROM users WHERE LOWER(uid)=? AND pwd=?;', t)
         if (cursor.fetchone() is not None):
             return 1
         else:
             return 0
     if (logintype == 2):
-        cursor.execute('SELECT aid FROM artists WHERE aid=? AND pwd=?;', t)
+        cursor.execute('SELECT aid FROM artists WHERE LOWER(aid)=? AND pwd=?;', t)
         if (cursor.fetchone() is not None):
             return 1
         else:
@@ -86,7 +88,7 @@ def loginScreen():
             print("LOGIN")
             print("----------")
             print("ID:")
-            id = input()
+            id = input().lower()
             verify = verifyID(id) # analyzes user ID if it exists or not
             if (verify == 0):
                 # no valid id
