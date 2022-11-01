@@ -19,14 +19,13 @@ def artistMenu(aid, con, cur):
     while (1):
         print("Select an option: ")
         print("1: Add a song !")
-        print("2: Find top fans !")
-        print("3: Find top playlists !")
-        print("4: Logout !")
+        print("2: Find top fans & playlists!")
+        print("3: Logout !")
         x = input()
-        if (x not in ['1','2','3','4']):
+        if (x not in ['1','2','3']):
             print("Please put a valid input !")
             continue
-        if (x == '4'):
+        if (x == '3'):
             print("Logging out !")
             break
         elif (x == '1'):
@@ -35,9 +34,9 @@ def artistMenu(aid, con, cur):
             # add a song here
             addSong(aid)
         elif (x == '2'):
-            print("Finding top fans !")
-        elif (x == '3'):
-            print("Finding top playlists !")
+            print("---------")            
+            print("Finding top fans & playlists!")
+            findTopStats(aid)
 
 def addSong(aid):
     # connection = con
@@ -167,6 +166,41 @@ def addSong(aid):
             break
         else:
             print("Invalid selection, try again.")
+
+    return
+
+def findTopStats(aid):
+
+    # get top users
+    get_top_fans_query = '''
+                    SELECT l.uid, u.name
+                    FROM listen l, songs s, perform p, users u
+                    WHERE l.sid=s.sid 
+                    AND s.sid=p.sid
+                    AND u.uid = l.uid
+                    AND p.aid=?
+                    group by l.uid
+                    order by sum(l.cnt*s.duration) desc
+                    limit 3;
+                    '''
+    
+    t = (aid.lower(),)
+    cursor.execute(get_top_fans_query, t)
+
+    # songs is a list of tuples where the first index of each tuple is the song id
+    top_fans = cursor.fetchall()
+
+    print("Top fans:")
+    for i, fan in enumerate(top_fans):
+        print("Fan #" + str(i+1) + ": " + fan[0] + " -- " + fan[1])
+
+    '''
+    for song in songs:
+        print(song[0]) 
+    '''
+
+    # listen.cnt * songs.duration will return the total amount of time
+    # a user has listened to this song
 
 
     return
