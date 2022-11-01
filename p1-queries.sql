@@ -1,11 +1,26 @@
 .echo on
 
 ----- Test songs
-SELECT songs.title
+SELECT *
 FROM songs;
 -----
 
--- Test sessions
+-- Test perform
 SELECT *
-FROM sessions
-WHERE sessions.uid = "u1";
+FROM perform;
+--
+
+-- -- Test sessions
+-- SELECT *
+-- FROM sessions
+-- WHERE sessions.uid = "u1";
+-- -- 
+
+-- get song shit
+-- SELECT *
+-- FROM songs, perform, artists
+-- WHERE perform.aid = artists.aid
+-- AND perform.sid = songs.sid;
+-- AND artists.aid='a1'
+-- AND songs.title='Applause'
+-- AND songs.duration=212;
