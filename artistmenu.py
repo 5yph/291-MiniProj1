@@ -36,6 +36,7 @@ def artistMenu(aid, con, cur):
         elif (x == '2'):
             print("---------")            
             print("Finding top fans & playlists!")
+            print("")
             findTopStats(aid)
 
 def addSong(aid):
@@ -196,6 +197,8 @@ def findTopStats(aid):
     for i, fan in enumerate(top_fans):
         print("Fan #" + str(i+1) + ": " + str(fan[0]) + " -- " + str(fan[1]))
 
+    print("")
+
     # get top 3 playlists that contain most of artists song
     get_top_playlists_query = '''
                             SELECT playlists.pid, playlists.title, COUNT(playlists.pid) AS pcnt
@@ -217,5 +220,7 @@ def findTopStats(aid):
     print("Top playlists:")
     for i, playlist in enumerate(top_playlists):
         print("Playlist #" + str(i+1) + ": " + str(playlist[0]) + " -- " + str(playlist[1]))
+
+    print("")
 
     return

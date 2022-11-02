@@ -98,6 +98,7 @@ def loginScreen():
                 # id in users and artists
                 print("Found login in Users and Artists !")
                 print("What would you like to login as? User or Artist?")
+                print("Type either 'User' or 'Artist' !")
                 while (1):
                     y = input()
                     if (y.lower() == 'user'):
@@ -130,20 +131,25 @@ def loginScreen():
             print("REGISTER")
             print("--------")
             print("Desired User ID:")
-            id = input()
-            if (id[0] != 'u' or not id[1:].isnumeric()):
-                print("Enter a valid User ID ! Format 'u' then an integer !")
+            id = input().lower()
+            verify = verifyID(id)
+
+            if (len(id) > 4):
+                print("Enter a valid User ID ! At most 4 characters !")
                 continue
-            elif (verifyID(id) != 0):
-                print("That ID exists ! Please choose another !")
+            elif (verify[0] == 1):
+                print("That User ID exists ! Please choose another !")
                 continue
+
             print("Your Name:")
             name = input()
             password = getpass("Password: ")
+
             if (len(name) == 0 or len(password) == 0):
                 print("Please use valid entries !")
                 continue
             register(id, name, password)
+
             return 1, id
             
         elif(x == '3'):
