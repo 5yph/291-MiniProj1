@@ -22,6 +22,11 @@ def userMenu(uid, con, cur):
             print("Please put a valid input !")
             continue
         if (x == '5'):
+
+            if (sno is not None):
+                print("Closing current session before logout...")
+                endSession(uid, sno)
+
             print("Logging out !")
             break
         elif (x == '1'):
@@ -75,6 +80,7 @@ def addSession(uid):
         sno = sno[0] + 1
     cursor.execute('INSERT INTO sessions VALUES (?,?,?,?)', (uid, sno, cur_date, None))
     connection.commit()
+
     return sno
 
 def endSession(uid, sno):
@@ -82,6 +88,7 @@ def endSession(uid, sno):
     end_date = time.strftime("%Y-%m-%d %H:%M:%S")
     cursor.execute('UPDATE sessions SET end = ? WHERE uid = ? AND sno = ?', (end_date, uid, sno))
     connection.commit()
+    return
 
 def spSearch(input):
     global connection, cursor
