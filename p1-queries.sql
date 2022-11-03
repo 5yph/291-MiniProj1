@@ -1,5 +1,9 @@
 .echo on
 
+-- Test users
+SELECT *
+FROM users;
+
 ----- Test songs
 SELECT *
 FROM songs;
@@ -23,15 +27,16 @@ FROM playlists;
 SELECT *
 FROm plinclude, songs
 WHERE plinclude.sid = songs.sid and plinclude.pid = '36';
+
 -- -- Test sessions
 SELECT *
 FROM sessions
 WHERE sessions.uid = "u0";
 -- 
 
-SELECT *
-FROM plinclude
-where plinclude.pid = '2';
+-- Test listens
+--SELECT *
+--FROM listen;
 
 -- get song shit
 SELECT *

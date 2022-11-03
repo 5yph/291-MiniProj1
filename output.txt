@@ -1,27 +1,282 @@
 
+-- Test users
+SELECT *
+FROM users;
+u1|Maheen Lynn|po395
+u2|Leena Markham|Dortsimo
+u3|Branden Escobar|4?Jkwer34
+u4|Digby Tierney|Querty44!
+u5|Harriet Beck|Rewt34reg
+u6|Aron Gu|Dortsimpson15?
+u7|Jeevan Dillard|Li430ig2
+u8|Laaibah Cano|abc4697
+u9|Ameila Pike|abcde
+u10|Davood Rafiei|FyTek4ji
+u11|Spencer Schimdt|I8293!!
+u12|Ryder Catonio|5432rfdsf
+u13|Dradelli Guy|wviegio
+u14|Aron Gu|L753fweE
+u15|Mark Sanchez|435operigki4
+u16|Marion Trap|poerkfFte56Y6
+u17|Mackenzie Parks|peorit45
+u18|Daria Blackburn|ofrepki3?
+u19|Samuel Dixon|3t4otif4i
+u20|Hamed Mirzaei|femferiof2
+u21|Amelia Pike|p593i4304kdj
+u22|Quinn Mccartney|4fo4lfs2309
+u23|Brenden Akhtar|o348f4i8
+u24|Catrina Maxwell|43r3rfkd1
+u25|Darsh Snyder|kgf4f499430
+u26|Pheobe Shannon|3fg349f3
+u27|Judy Walsh|efgk304952
+u28|Bret Bartlett|40fk3i0fk
+u29|Diogo Lowry|34rf391kes
+u30|Rudra Duke|o4kg4pk2
+u31|Mike Smith|9tf394f31
+u32|Conner Wang|3fk30tii34
+u33|Saim Hays|49fr2kasi
+u34|Jeanne Carlson|340fk3wif
+u35|John-Paul Whittaker|i43fk3fri
+u36|Bjorn Partridge|apkzmiowrfm
+u37|Dominic Chen|ef3f3kpk
+u38|Aleah Mendoza|ef3m4r095
+u39|Kiyan Underwood|34rkr93gfrk
+u40|Wendy Fernandez|3f3mf2i4
+u41|Shamima Gonzales|por3p409
+u42|Mike Smith|232ed2drfr
+a41|Fake Kendrick Lamar|gote
+a44|Christina Aguilera|3tfj3
+a56|Justin Babe|3opt54i
+u0|Lawrence|pisspoo92
+
 ----- Test songs
+SELECT *
+FROM songs;
+1|Waka Waka(This Time For Africa)|202
+2|Applause|212
+3|Demons|177
+4|Counting Stars|259
+5|Wavin flag|220
+6|Just Give Me a Reason|242
+7|Stronger(What Doesn`t Kill You)|222
+8|We Are Young|233
+9|Moves Like Jagger|201
+10|Nice for what|210
+11|Hold on, we are going home|227
+12|DJ Got Us Fallin` in Love|221
+13|Wild Ones|233
+14|Everybody Talks|179
+15|Good Time|206
+16|Blame|214
+17|I Need Your Love|234
+18|Wake Me Up|249
+19|Poker Face|238
+20|Cheap Thrills|224
+21|No Lie|221
+22|Gentleman|194
+23|Titanium|245
+24|Cool Kids|237
+25|Chasing The Sun|199
+26|We Found Love|215
+27|Give Me Everything|252
+28|Come & Get It|231
+29|Me and My Broken Heart|193
+30|Best Day of My Life|194
+31|International Love|227
+32|You Make Me Feel...|216
+33|Safe and Sound|193
+34|Burn|231
+35|Shut Up and Dance|197
+36|Want to Want Me|207
+37|Dynamite|202
+38|Feel This Moment|229
+39|Hall of Fame|202
+40|On the Floor|231
+41|I Feel It Coming|269
+42|Blinding Lights|201
+43|My Heart Will Go On|280
+44|I`m Alive|210
+45|Complicated|244
+46|Club Can`t Handle Me|232
+47|Wannabe|172
+48|Shape of You|233
+49|Bad Company|290
+50|Bad Blood|211
+51|Peaches|198
+52|pisswithme|20
 -----
 
 -- Test perform
+SELECT *
+FROM perform;
+a1|2
+a1|19
+a2|4
+a3|3
+a4|22
+a5|6
+a6|6
+a7|7
+a8|8
+a9|9
+a10|5
+a11|12
+a11|27
+a11|31
+a11|38
+a11|40
+a12|13
+a12|20
+a12|23
+a13|14
+a14|15
+a15|16
+a15|17
+a15|26
+a16|17
+a16|34
+a17|18
+a18|20
+a18|21
+a19|23
+a19|46
+a20|10
+a20|11
+a21|24
+a22|25
+a23|28
+a24|29
+a25|30
+a26|32
+a27|33
+a28|35
+a29|36
+a30|37
+a31|39
+a32|40
+a33|1
+a34|41
+a34|42
+a35|43
+a35|44
+a36|45
+a37|13
+a37|46
+a38|47
+a39|48
+a40|49
+a41|50
+a42|50
+a43|1
+a44|9
+a44|38
+a45|12
+a46|15
+a47|16
+a48|21
+a49|26
+a50|27
+a51|27
+a52|27
+a53|31
+a54|32
+a55|39
+a56|51
+a57|51
+a58|51
+a1|52
+a2|52
 --
 
 
 
 -- Test playlists
 
+SELECT *
+FROM playlists;
+1|Fun Songs|u25
+2|Relaxing Music|u40
+3|Relaxing Music|u25
+4|2010s|u36
+5|Pop Music|u7
+6|Obscene Language|u11
+7|Yolo|u13
+8|Favorites|u22
+9|Favorites|u22
+10|Wouldn`t Play Again|u33
+11|Fun Songs|u9
+12|Love These Songs!|u34
+13|Retro Music|u22
+14|Trending Songs|u19
+15|Castle Music|u6
+16|Lady Gaga|u17
+17|Sean Paul|u19
+18|Rap|u38
+19|Pop Music|u31
+20|Let`s Get It!|u3
+21|Funny Songs|u27
+22|Great|u24
+23|2013 Songs|u26
+24|3 Minute Songs|u42
+25|30|u28
+26|Whoa|u9
+27|Lol|u15
+28|Davood`s Favorites|u10
+29|Ryder`s Favorites|u12
+30|Songs for 291|u10
+31|Cool Playlist|u18
+32|Give Me Everything|u26
+33|Blinding|u10
+34|Peaches|a56
+35|Empty Playlist|a56
+36|happy|u0
+37|sad|u0
 
 
 -- Test playlist includes
 
+SELECT *
+FROm plinclude, songs
+WHERE plinclude.sid = songs.sid and plinclude.pid = '36';
+36|4|2|4|Counting Stars|259
+36|5|1|5|Wavin flag|220
+
 -- -- Test sessions
+SELECT *
+FROM sessions
+WHERE sessions.uid = "u0";
+u0|1|2022-11-03 13:43:30|2022-11-03 13:43:56
+u0|2|2022-11-03 13:49:05|
 -- 
 
+-- Test listens
+--SELECT *
+--FROM listen;
 
 -- get song shit
+SELECT *
+FROM songs, perform, artists
+WHERE perform.aid = artists.aid
+AND perform.sid = songs.sid
+AND artists.aid='a1';
+2|Applause|212|a1|2|a1|Lady Gaga|United States|p4oktf3f9
+19|Poker Face|238|a1|19|a1|Lady Gaga|United States|p4oktf3f9
+52|pisswithme|20|a1|52|a1|Lady Gaga|United States|p4oktf3f9
 
 
 -- THIS GETS THE USERS WHO LISTENED TO
 -- ARTISTS A1 THE MOST IN TERMS OF CNT*DURATION
+select l.uid, p.aid, sum(l.cnt*s.duration) as q
+from listen l, songs s, perform p
+where l.sid=s.sid and s.sid=p.sid and p.aid = 'a1'
+group by l.uid
+order by q desc;
+u2|a1|13525.6
+u23|a1|4522.0
+u38|a1|3654.0
+u19|a1|3570.0
+u11|a1|2840.8
+u1|a1|636.0
 --limit 3;
 
 -- Get number of playlist each song is in
@@ -36,5 +291,47 @@
 -- Get number of playlist each song is in (no joins)
 -- also only include songs from particular artist
 -- since no joins, this doesn't include songs in 0 playlists
+SELECT playlists.pid, songs.sid, COUNT(playlists.pid) AS pcnt
+FROM songs, plinclude, playlists, perform
+WHERE songs.sid = plinclude.sid
+AND playlists.pid = plinclude.pid
+AND songs.sid = perform.sid
+AND perform.aid = 'a1' -- only lady gaga
+GROUP BY playlists.pid
+ORDER BY pcnt DESC;
+21|2|2
+30|19|1
+29|19|1
+20|2|1
+17|2|1
+16|2|1
+15|2|1
+6|2|1
+4|19|1
+2|19|1
 
 -- Same as above but only select relevant stuff
+SELECT playlists.pid, playlists.title, COUNT(playlists.pid) AS pcnt
+FROM songs, plinclude, playlists, perform
+WHERE songs.sid = plinclude.sid
+AND playlists.pid = plinclude.pid
+AND songs.sid = perform.sid
+AND perform.aid = 'a11' -- only pitbull
+GROUP BY playlists.pid
+ORDER BY pcnt DESC;
+21|Funny Songs|5
+11|Fun Songs|2
+7|Yolo|2
+32|Give Me Everything|1
+31|Cool Playlist|1
+30|Songs for 291|1
+27|Lol|1
+25|30|1
+24|3 Minute Songs|1
+19|Pop Music|1
+17|Sean Paul|1
+16|Lady Gaga|1
+14|Trending Songs|1
+10|Wouldn`t Play Again|1
+6|Obscene Language|1
+3|Relaxing Music|1
