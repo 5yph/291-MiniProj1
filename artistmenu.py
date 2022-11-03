@@ -79,7 +79,7 @@ def addSong(aid):
     cursor.execute(song_exist_query, t)
 
     song_exist_rows = cursor.fetchall()
-    print(song_exist_rows)
+
     # if so, warn user and either reject it or confirm addition of new song
     if len(song_exist_rows) > 0:
         # row exists matching song description
