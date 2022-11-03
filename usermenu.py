@@ -51,49 +51,59 @@ def userMenu(uid, con, cur):
                     for result in results:
                         print(result[0] + ", " + result[1] + ", " + result[2])
                 elif (y.upper() == 'N'):
-                    print('Oh well whatever !')
+                    print('Not displaying all the results')
                 else:
-                    print("Y or N bozo ! You don't get to see the rest then !")
+                    print("Please select Y or N.")
 
-            else:
+            elif len(results) > 0:
                 for result in results:
                     print(result[0] + ", " + result[1] + ", " + result[2])
-
-            
-            print("Enter an artist's name from selection to see details on songs they performed")
-            artistName = input()
-            if artistName == '':
-                print("Please give an input.")
+            else:
+                print("No results found!")
                 continue
-            foundArtist = 0
-            artistNameCap = artistName.lower()
-            for result in results:
-                thisRes = result[0][6:].lower() 
-                if artistName == thisRes:
-                    foundArtist = foundArtist + 1
-                    print("Songs:")
-                    getResult = getSongs(artistName)
-                    for result in getResult:
-                        print(result[0] + ", " + result[1] + ", " + result[2])
-                    print("Select a song to start performing actions (Give sid): ")
-
-                    songSelected = input()
-
-                    if songSelected == "":
-                        print("Please give an input.")
-                        continue
-                    foundSong = 0
-                    for resultSong in getResult:
-                        if songSelected == resultSong[0][9:]:
-                            foundSong = foundSong + 1
-                            songActions(uid, sno, songSelected)
-
-                    
-                    if foundSong == 0:
-                        print("Song not found. Please enter a proper ID within the list of artists returned.")
+            while (1):
+                print("Enter an artist's name from selection to see details on songs they performed. Enter 4 to exit.")
+                artistName = input()
+                if artistName == '':
+                    print("Please give an input.")
+                    continue
+                elif artistName == '4':
+                    print("Exiting.")
                     break
-            if foundArtist == 0:
-                print("Artist not found. Please enter a name within the list of artists returned.")
+                foundArtist = 0
+                artistNameCap = artistName.lower()
+                for result in results:
+                    thisRes = result[0][6:].lower() 
+                    if artistName == thisRes:
+                        foundArtist = foundArtist + 1
+                        print("Songs:")
+                        getResult = getSongs(artistName)
+
+                        while(1):
+                            for result in getResult:
+                                print(result[0] + ", " + result[1] + ", " + result[2])
+                            print("Select a song to start performing actions (Give sid). Enter '4' to quit.")
+
+                            songSelected = input()
+
+                            if songSelected == "":
+                                print("Please give an input.")
+                                continue
+                            elif songSelected == '4':
+                                print("Exiting:")
+                                break
+                            foundSong = 0
+                            for resultSong in getResult:
+                                if songSelected == resultSong[0][9:]:
+                                    foundSong = foundSong + 1
+                                    songActions(uid, sno, songSelected)
+                                    break
+                            if foundSong == 0:
+                                print("Song not found. Please enter a proper ID within the list of songs returned.")
+                            continue
+                if foundArtist == 0:
+                    print("Artist not found. Please enter a name within the list of artists returned.")
+                    continue
             
 
             
@@ -186,11 +196,14 @@ def getSongs(name):
 def songActions(uid, sno, sid):
     global connection, cursor
     while(1):
-        print("Hey, loser! You selected this song! What do you wanna do? Press 1 to listen, 2 to see more info, and 3 to add it to a playlist.")
+
+        cursor.execute('SELECT songs.title FROM songs WHERE songs.sid = ?', (sid,))
+        songTitle = cursor.fetchone()
+        print("You selected the song: " + songTitle[0] + "! What do you wanna do? Press 1 to listen, 2 to see more info, 3 to add it to a playlist, and 4 to exit.")
 
         choice = input()
 
-        if(choice == 1):
+        if(choice == '1'):
             # listening to song
             print("Starting listening event.")
             if (sno == None):
@@ -198,85 +211,134 @@ def songActions(uid, sno, sid):
 
             cursor.execute('SELECT * FROM listen WHERE uid=? and sno = ? and sid = ?', ((uid, sno, sid)))
             listenExists = cursor.fetchone()
-            if (listenExists[0] is not None):
+            if (listenExists is not None):
+                print("Listening event exists. Adding to event.")
                 cursor.execute('UPDATE listen SET cnt = cnt + 1 WHERE uid = ? AND sno = ? AND sid = ?;', (uid, sno, sid))
+                connection.commit()
             else:
+                print("Listening event does not exists. Creating new listen event.")
                 cursor.execute('INSERT INTO listen values (?, ?, ?, ?);', (uid, sno, sid, 1))
+                connection.commit()
 
             print("You have finished listening. Man was that song was awful.")
             continue
 
-        elif (choice == 2):
+        elif (choice == '2'):
             # View more info
 
             print('Displaying info of the song:')
 
-            query1 = "SELECT artists.name from artists, perform where artists.aid = perform.aid and perform.sid = ?"
+            query1 = "SELECT 'Artist name: ' || artists.name from artists, perform where artists.aid = perform.aid and perform.sid = ?"
 
-            query2 = "SELECT songs.sid, songs.title, songs.duration, from artists, songs, perform where songs.sid = ?"
+            query2 = "SELECT 'Song ID: ' || songs.sid, 'Title: ' || songs.title, 'Song Duration: ' || songs.duration from songs where songs.sid = ?"
 
-            query3 = "SELECT playlists.title from playlists, plinclude where playlists.pid = plinclude.pid and plinclude.sid = ?"
+            query3 = "SELECT 'Playlists: ' || playlists.title from playlists, plinclude where playlists.pid = plinclude.pid and plinclude.sid = ?"
 
 
             print('Artist(s) who performed the song:')
 
-            cursor.execute(query1, sid)
+
+            cursor.execute(query1, (sid,))
 
             results = cursor.fetchall()
 
             for result in results:
-                print(result)
+                print(result[0])
 
             print('Song details:')
 
-            cursor.execute(query2, sid)
+            cursor.execute(query2, (sid,))
 
             results = cursor.fetchall()
 
             for result in results:
-                print(result)
+                print(result[0] + ', ' + result[1] + ', ' + result[2])
 
 
             print('Playlists song is in:')
 
-            cursor.execute(query3, sid)
+            cursor.execute(query3,  (sid,))
 
+            
             results = cursor.fetchall()
 
-            for result in results:
-                print(result)
+            if results[0] is None:
+                print("The song is currently in no playlists.")
+            else:
+                for result in results:
+                    print(result[0])
 
 
-            print("Done displaying song info. Cringe.")
+            print("Done displaying song info.")
             continue
 
 
-        elif (choice == 3):
+        elif (choice == '3'):
             # Add to the playlist
 
-            print("Adding song to playlist:")
-
             # Find if user has playlists:
+            print("Displaying Playlists that you created: ")
+            cursor.execute('SELECT "Playlist ID: " || playlists.pid, "Playlist Title: " || playlists.title from playlists, users WHERE playlists.uid = users.uid AND users.uid like ?', (uid,))
+            getPlaylist = cursor.fetchall()
+            hasPlaylist = 0
+            for playlist in getPlaylist:
+                print(playlist[0] + ", " + playlist[1])
+                hasPlaylist= hasPlaylist + 1
+            if hasPlaylist == 0:
+                print("You currently have no playlists!")
+            print("Select a playlist you want to enter the song in (give the PID), or if you want to create a new playlist, enter 'new':")
+            while(1):
+                selectPid = input()
+                if selectPid == '':
+                    print("PLEASE GIVE A PID")
+                    continue
+                elif selectPid == 'new':
+                    print("Please give a title to the playlist:")
+                    while(1):
+                        getTitle = input()
+                        if getTitle == '':
+                            print("PLEASE GIVE A TITLE")
+                            continue
+                        cursor.execute('SELECT MAX(pid+0) FROM playlists')
+                        pid = cursor.fetchone()
+                        if (pid[0] is None):
+                            pid = 1
+                        else:
+                            pid = pid[0] + 1
+                            cursor.execute('INSERT INTO playlists VALUES (?,?,?)', (pid, getTitle, uid))
+                            print("Created playlist.")
+                            cursor.execute('INSERT INTO plinclude VALUES (?,?,?)', (pid, sid, 1))
+                            connection.commit()
+                            print("Added song into the playlist.")
+                            break
 
-            
+                else:
+                    isPlaylist = 0
+                    for playlist in getPlaylist:
+                        if (selectPid == playlist[0][13:]):
+                            isPlaylist = isPlaylist + 1
+                            cursor.execute('SELECT * from plinclude where plinclude.pid = ? and plinclude.sid = ?', (selectPid, sid))
+                            hasEntry = cursor.fetchone()
+                            if (hasEntry is not None):
+                                print("This playlist already has the song in it! Select a different playlist, or create a new one!")
+                                continue
+                            cursor.execute('SELECT MAX(sorder+0) from plinclude where plinclude.pid = ?', (selectPid,))
+                            sorder = cursor.fetchone()
+                            sorder = sorder[0] + 1
+                            cursor.execute('INSERT INTO plinclude VALUES (?,?,?)', (selectPid, sid, sorder))
+                            connection.commit()
+                            print("Added song into the playlist.")
+                            break
+                    if isPlaylist == 0:
+                        print("GIVEN PID IS NOT IN YOUR PLAYLISTS! ENTER A PROPER PID OR CREATE A NEW PLAYLIST!")
+                        continue
+                break
+            continue
 
-            # If creating new playlist, select unique pid
 
-            print("Create a name for the playlist:")
-
-            playlistTitle = input()
-
-            cursor.execute('SELECT MAX(pid+0) FROM playlists')
-            pid = cursor.fetchone()
-            if (pid[0] is None):
-                pid = 1
-            else:
-                pid = pid[0] + 1
-            cursor.execute('INSERT INTO playlist VALUES (?,?,?)', (pid, playlistTitle, uid))
-            connection.commit()
-            return sno
-
-        
+        elif (choice == '4'):
+            print("Exiting:")
+            break
 
         else:
 

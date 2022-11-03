@@ -10,11 +10,28 @@ SELECT *
 FROM perform;
 --
 
+
+
+-- Test playlists
+
+SELECT *
+FROM playlists;
+
+
+-- Test playlist includes
+
+SELECT *
+FROm plinclude, songs
+WHERE plinclude.sid = songs.sid and plinclude.pid = '36';
 -- -- Test sessions
--- SELECT *
--- FROM sessions
--- WHERE sessions.uid = "u1";
--- -- 
+SELECT *
+FROM sessions
+WHERE sessions.uid = "u0";
+-- 
+
+SELECT *
+FROM listen
+where listen.uid = 'u0';
 
 -- get song shit
 -- SELECT *
