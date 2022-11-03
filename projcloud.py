@@ -90,6 +90,7 @@ def loginScreen():
             print("ID:")
             id = input().lower()
             verify = verifyID(id) # analyzes user ID if it exists or not
+
             if (verify == 0):
                 # no valid id
                 print("Could not find login! ! ! Please register ! ! !")
@@ -137,7 +138,7 @@ def loginScreen():
             if (len(id) > 4):
                 print("Enter a valid User ID ! At most 4 characters !")
                 continue
-            elif (verify[0] == 1):
+            elif (verify != 0):
                 print("That User ID exists ! Please choose another !")
                 continue
 
