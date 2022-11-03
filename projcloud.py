@@ -170,7 +170,7 @@ def main():
     connect(db)
     while (1):
         x = loginScreen() # interface for logging in 
-        # doube check if x is a list or is just the first of the returned types
+        # double check if x is a list or is just the first of the returned types
         if (x is not None):
             if (x[0] == 1):
                 print("Login Type User")
@@ -179,8 +179,6 @@ def main():
             print("Successfully logged in as: " + x[1])
         else:
             break
-
-        # More features past this point.
 
         if (x[0] == 1):
             #User Menu

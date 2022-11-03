@@ -8,6 +8,7 @@ def userMenu(uid, con, cur):
     connection = con
     cursor = cur
 
+    # user menu interface
     print("")
     print("USER MENU")
     print("---------")
@@ -20,11 +21,13 @@ def userMenu(uid, con, cur):
         print("4: End your session !")
         print("5: Logout !")
         x = input()
+
         if (x not in ['1','2','3','4','5']):
+            # invalid input
             print("Please put a valid input !")
             continue
         if (x == '5'):
-
+            # logout (close any sessions first)
             if (sno is not None):
                 print("Closing current session before logout...")
                 endSession(uid, sno)
@@ -32,20 +35,23 @@ def userMenu(uid, con, cur):
             print("Logging out !")
             break
         elif (x == '1'):
+            # start sessions
             print('Starting a session !')
             if (sno is not None):
                 print("You're already listening ! End this session first !")
                 continue
             sno = addSession(uid)
-
         elif (x == '2'):
+            # search songs for keywords
             print("Enter space separated keywords you'd like to search by ! (e.g 'Fun Songs')")
             keywords = input()
             if keywords == '':
                 print("Enter an input properly !")
                 continue
+            # get song results
             results = spSearch(keywords)
             if len(results) > 5:
+                # display only first 5
                 for i in range(5):
                     print(results[i][0] + ", " + results[i][1] + ", " + results[i][2]) #if you want the # of matches, use [3]
                 print("There are more than 5 matches ! Do you want to see the rest ? ! ?")
@@ -58,12 +64,13 @@ def userMenu(uid, con, cur):
                     print('Oh well whatever !')
                 else:
                     print("Y or N bozo ! You don't get to see the rest then !")
-                    # could maybe have this loop. i say just leave it
             else:
+                # display all if less than 6
                 for result in results:
                     print(result[0] + ", " + result[1] + ", " + result[2])
                     
             while(1):
+                # song actions
                 print("Select a song to start performing actions (Give sid). Or, if you want to select a playlist, enter 'P(PID)'. ex: playlist with PID:0, enter 'P0'. Enter 'q' to quit.")
 
                 songSelected = input().lower()
@@ -77,7 +84,7 @@ def userMenu(uid, con, cur):
                 elif songSelected[0] == 'p':
                     hasPlaylist = 0
                     for result in results:
-                        if result[0][0].lower() == 'p' and songSelected[1] == result[0][13:]:
+                        if result[0][0].lower() == 'p' and songSelected[1:] == result[0][13:]:
                             hasPlaylist = hasPlaylist + 1
                             playlists = getSongsPlaylist(songSelected[1])
                             while(1):
@@ -191,10 +198,6 @@ def userMenu(uid, con, cur):
                     print("Artist not found. Please enter an index assigned to an artist within the list of artists returned.")
                     continue
             
-
-            
-
-
         elif (x == '4'):
             if (sno is None):
                 print("You don't have a session !")
@@ -467,12 +470,14 @@ def songActions(uid, sno, sid):
 
 def spSearch(input):
     global connection, cursor
+    # get space-separated keywords
     temp = (input.lower()).split()
     temp2 = ['%' + t + '%' for t in temp]
     keywords = tuple(temp2)
     query1 = "SELECT 'Song ID: ' || sid, title, 'Duration: ' || duration || ' seconds', "
     final1= " FROM songs GROUP BY sid, title, duration HAVING matches > 0 ORDER BY matches DESC;"
     
+    # find matching keywords
     for keyword in keywords:
         query1 += "(title LIKE ?)"
         if keyword is not keywords[-1]:
