@@ -98,18 +98,16 @@ def userMenu(uid, con, cur):
                                     print("Song/Playlist not found. Please enter a proper ID within the list of songs/playlists returned.")
                                 continue
                             break
-
-
-
-                foundSong = 0
-                for resultSong in results:
-                    if songSelected == resultSong[0][9:]:
-                        foundSong = foundSong + 1
-                        songActions(uid, sno, songSelected)
-                        break
-                if foundSong == 0:
-                    print("Song not found. Please enter a proper ID within the list of songs returned.")
-                continue
+                else:
+                    foundSong = 0
+                    for resultSong in results:
+                        if songSelected == resultSong[0][9:]:
+                            foundSong = foundSong + 1
+                            songActions(uid, sno, songSelected)
+                            break
+                    if foundSong == 0:
+                        print("Song not found. Please enter a proper ID within the list of songs returned.")
+                    continue
             print("")
 
         elif (x == '3'):
@@ -478,17 +476,3 @@ def spSearch(input):
     results = results1 + results2
     results.sort(key=lambda tup: tup[3], reverse=True)
     return results
-
-        #  Song actions: When a song is selected, the user can perform any of these actions: (1) listen to it, (2) see more information about it, or (3) add it to a playlist. 
-        # More information for a song is the names of artists who performed it in addition to id, title and duration of the song as well as the names of playlists the song is in (if any). 
-        # When a song is selected for listening, a listening event is recorded within the current session of the user (if a session has already started for the user) or within a new session (if not). 
-        # When starting a new session, follow the steps given for starting a session. A listening event is recorded by either inserting a row to table listen or increasing the listen count in this table by 1. 
-        # When adding a song to a playlist, the song can be added to an existing playlist owned by the user (if any) or to a new playlist. When it is added to a new playlist, a new playlist should be created with 
-        # a unique id (created by your system) and the uid set to the id of the user and a title should be obtained from input. 
-
-# Artists should be able to perform the following actions:
-
-# Add a song. The artists should be able to add a song by providing a title and a duration. The system should check if the artists already has a song with the same title and duration. If not, the song should be 
-# added with a unique id (assigned by your system) and any additional artist who may have performed the song with their ids obtained from input.
-# Find top fans and playlists. The artist should be able to list top 3 users who listen to their songs the longest time and top 3 playlists that include the largest number of their songs. If there are less than 
-# 3 such users or playlists, fewer number of users and playlists can be returned. 
