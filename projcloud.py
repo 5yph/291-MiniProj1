@@ -138,7 +138,8 @@ def loginScreen():
             if (len(id) > 4):
                 print("Enter a valid User ID ! At most 4 characters !")
                 continue
-            elif (verify != 0):
+            elif (verify == 1 or verify == 3):
+                # if a user ID already exists with that id, do not let them sign in
                 print("That User ID exists ! Please choose another !")
                 continue
 
