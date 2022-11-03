@@ -1,5 +1,4 @@
 import sqlite3
-import this
 import time
 
 def userMenu(uid, con, cur):
