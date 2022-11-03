@@ -19,14 +19,13 @@ def artistMenu(aid, con, cur):
     while (1):
         print("Select an option: ")
         print("1: Add a song !")
-        print("2: Find top fans !")
-        print("3: Find top playlists !")
-        print("4: Logout !")
+        print("2: Find top fans & playlists!")
+        print("3: Logout !")
         x = input()
-        if (x not in ['1','2','3','4']):
+        if (x not in ['1','2','3']):
             print("Please put a valid input !")
             continue
-        if (x == '4'):
+        if (x == '3'):
             print("Logging out !")
             break
         elif (x == '1'):
@@ -35,9 +34,10 @@ def artistMenu(aid, con, cur):
             # add a song here
             addSong(aid)
         elif (x == '2'):
-            print("Finding top fans !")
-        elif (x == '3'):
-            print("Finding top playlists !")
+            print("---------")            
+            print("Finding top fans & playlists!")
+            print("")
+            findTopStats(aid)
 
 def addSong(aid):
     # connection = con
@@ -160,13 +160,67 @@ def addSong(aid):
                     cursor.execute('INSERT INTO perform VALUES (?,?)', (new_artist_aid, new_sid))
                     connection.commit()
                     artists_who_perform.add(new_artist_aid.lower())
-                else:
+                elif (ans2 == '2'):
                     print("Not adding this artist...")
+                else:
+                    print("Invalid input, not adding...")
 
         elif (ans == '2'):
             break
         else:
             print("Invalid selection, try again.")
 
+    return
+
+def findTopStats(aid):
+
+    # get top 3 users who listen to artist by total duration
+    get_top_fans_query = '''
+                    SELECT l.uid, u.name
+                    FROM listen l, songs s, perform p, users u
+                    WHERE l.sid=s.sid 
+                    AND s.sid=p.sid
+                    AND u.uid = l.uid
+                    AND LOWER(p.aid)=?
+                    group by l.uid
+                    order by sum(l.cnt*s.duration) desc
+                    limit 3;
+                    '''
+    
+    t = (aid.lower(),)
+    cursor.execute(get_top_fans_query, t)
+
+    # songs is a list of tuples where the first index of each tuple is the song id
+    top_fans = cursor.fetchall()
+
+    print("Top fans:")
+    for i, fan in enumerate(top_fans):
+        print("Fan #" + str(i+1) + ": " + str(fan[0]) + " -- " + str(fan[1]))
+
+    print("")
+
+    # get top 3 playlists that contain most of artists song
+    get_top_playlists_query = '''
+                            SELECT playlists.pid, playlists.title, COUNT(playlists.pid) AS pcnt
+                            FROM songs, plinclude, playlists, perform
+                            WHERE songs.sid = plinclude.sid
+                            AND playlists.pid = plinclude.pid
+                            AND songs.sid = perform.sid
+                            AND LOWER(perform.aid) =?
+                            GROUP BY playlists.pid
+                            ORDER BY pcnt DESC
+                            LIMIT 3;
+                            '''
+    t = (aid.lower(),)
+    cursor.execute(get_top_playlists_query, t)
+
+    # playlists is a list of tuples where the first index of each tuple is the pid
+    top_playlists = cursor.fetchall()
+
+    print("Top playlists:")
+    for i, playlist in enumerate(top_playlists):
+        print("Playlist #" + str(i+1) + ": " + str(playlist[0]) + " -- " + str(playlist[1]))
+
+    print("")
 
     return

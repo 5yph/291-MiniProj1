@@ -3,6 +3,7 @@ import this
 import time
 
 def userMenu(uid, con, cur):
+
     global connection, cursor, songCursor
 
     connection = con
@@ -24,6 +25,11 @@ def userMenu(uid, con, cur):
             print("Please put a valid input !")
             continue
         if (x == '5'):
+
+            if (sno is not None):
+                print("Closing current session before logout...")
+                endSession(uid, sno)
+
             print("Logging out !")
             break
         elif (x == '1'):
@@ -197,6 +203,31 @@ def userMenu(uid, con, cur):
             else:
                 endSession(uid, sno)
                 sno = None
+        elif (x == '2'):
+            print("Enter space separated keywords you'd like to search by ! (e.g 'Fun Songs')")
+            keywords = input()
+            if keywords == '':
+                print("Enter an input properly !")
+                continue
+            results = spSearch(keywords)
+            if len(results) > 5:
+                for i in range(5):
+                    print(results[i][0] + ", " + results[i][1] + ", " + results[i][2]) #if you want the # of matches, use [3]
+                print("There are more than 5 matches ! Do you want to see the rest ? ! ?")
+                y = input('Y or N: ')
+                if (y.upper() == 'Y'):
+                    print('Showing all results ! :')
+                    for result in results:
+                        print(result[0] + ", " + result[1] + ", " + result[2])
+                elif (y.upper() == 'N'):
+                    print('Oh well whatever !')
+                else:
+                    print("Y or N bozo ! You don't get to see the rest then !")
+                    # could maybe have this loop. i say just leave it
+            else:
+                for result in results:
+                    print(result[0] + ", " + result[1] + ", " + result[2])
+            print("")
 
 def addSession(uid):
     global connection, cursor
@@ -210,6 +241,7 @@ def addSession(uid):
         sno = sno[0] + 1
     cursor.execute('INSERT INTO sessions VALUES (?,?,?,?)', (uid, sno, cur_date, None))
     connection.commit()
+
     return sno
 
 def endSession(uid, sno):
@@ -217,8 +249,7 @@ def endSession(uid, sno):
     end_date = time.strftime("%Y-%m-%d %H:%M:%S")
     cursor.execute('UPDATE sessions SET end = ? WHERE uid = ? AND sno = ?', (end_date, uid, sno))
     connection.commit()
-
-
+    
 def findArtist(keywords):
     global connection, cursor
 
@@ -433,6 +464,7 @@ def songActions(uid, sno, sid):
             print("INCORRECT INPUT. GIVE VALUES OF EITHER 1, 2, OR 3.")
             continue
 
+    return
 
 def spSearch(input):
     global connection, cursor
