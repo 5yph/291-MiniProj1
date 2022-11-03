@@ -160,6 +160,9 @@ def userMenu(uid, con, cur):
                 elif artistID == 'q':
                     print("Exiting.")
                     break
+                elif int(artistID) > len(results) -1:
+                    print("Given index is out of range. Try again")
+                    continue
                 foundArtist = 0
                 for i in range(len(results)+1):
                     if artistID == str(i):
