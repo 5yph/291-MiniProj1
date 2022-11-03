@@ -59,14 +59,14 @@ def userMenu(uid, con, cur):
                     print(result[0] + ", " + result[1] + ", " + result[2])
                     
             while(1):
-                print("Select a song to start performing actions (Give sid). Or, if you want to select a playlist, enter 'P(PID)'. ex: playlist with PID:0, enter 'P0'. Enter '4' to quit.")
+                print("Select a song to start performing actions (Give sid). Or, if you want to select a playlist, enter 'P(PID)'. ex: playlist with PID:0, enter 'P0'. Enter 'q' to quit.")
 
                 songSelected = input().lower()
 
                 if songSelected == "":
                     print("Please give an input.")
                     continue
-                elif songSelected == '4':
+                elif songSelected == 'q':
                     print("Exiting:")
                     break
                 elif songSelected[0] == 'p':
@@ -78,14 +78,14 @@ def userMenu(uid, con, cur):
                             while(1):
                                 for result in playlists:
                                     print(result[0] + ", " + result[1] + ", " + result[2])
-                                print("Select a song to start performing actions (Give sid). Enter '4' to quit.")
+                                print("Select a song to start performing actions (Give sid). Enter 'q' to quit.")
 
                                 songSelected = input()
 
                                 if songSelected == "":
                                     print("Please give an input.")
                                     continue
-                                elif songSelected == '4':
+                                elif songSelected == 'q':
                                     print("Exiting:")
                                     break
                                 foundSong = 0
@@ -120,16 +120,20 @@ def userMenu(uid, con, cur):
                 print("Please give an input.")
                 continue
             if len(results) > 5:
+                ind = 0
                 for i in range(5):
-                    print("Index: " + str(i) + " " + results[i][0] + ", " + results[i][1] + ", " + results[i][2]) #if you want the # of matches, use [3]
+                    print("Index: " + str(ind) + " " + results[i][0] + ", " + results[i][1] + ", " + results[i][2]) #if you want the # of matches, use [3]
+                    ind = ind + 1
                 print("There are more than 5 matches ! Do you want to see the rest ? ! ?")
                 y = input('Y or N: ')
                 if (y.upper() == 'Y'):
                     print('Showing all results ! :')
                     i - 0
+                    ind = 0
                     for result in results:
-                        print(" Index: " + str(i) + " " + result[0] + ", " + result[1] + ", " + result[2])
+                        print(" Index: " + str(ind) + " " + result[0] + ", " + result[1] + ", " + result[2])
                         i = i + 1
+                        ind = ind + 1
                 elif (y.upper() == 'N'):
                     print('Not displaying all the results')
                 else:
@@ -144,16 +148,16 @@ def userMenu(uid, con, cur):
                 print("No results found!")
                 continue
             while (1):
-                print("Enter an index assigned to an artist from selection to see details on songs they performed. Enter 4 to exit.")
+                print("Enter an index assigned to an artist from selection to see details on songs they performed. Enter q to exit.")
                 artistID = input()
                 if artistID == '':
                     print("Please give an input.")
                     continue
-                elif artistID == '4':
+                elif artistID == 'q':
                     print("Exiting.")
                     break
                 foundArtist = 0
-                for i in range(len(results)):
+                for i in range(len(results)+1):
                     if artistID == str(i):
                         foundArtist = foundArtist + 1
                         print("Songs:")
@@ -161,14 +165,14 @@ def userMenu(uid, con, cur):
                         while(1):
                             for result in getResult:
                                 print(result[0] + ", " + result[1] + ", " + result[2])
-                            print("Select a song to start performing actions (Give sid). Enter '4' to quit.")
+                            print("Select a song to start performing actions (Give sid). Enter 'q' to quit.")
 
                             songSelected = input()
 
                             if songSelected == "":
                                 print("Please give an input.")
                                 continue
-                            elif songSelected == '4':
+                            elif songSelected == 'q':
                                 print("Exiting:")
                                 break
                             foundSong = 0
@@ -284,7 +288,7 @@ def songActions(uid, sno, sid):
 
         cursor.execute('SELECT songs.title FROM songs WHERE songs.sid = ?', (sid,))
         songTitle = cursor.fetchone()
-        print("You selected the song: " + songTitle[0] + "! What do you wanna do? Press 1 to listen, 2 to see more info, 3 to add it to a playlist, and 4 to exit.")
+        print("You selected the song: " + songTitle[0] + "! What do you wanna do? Press 1 to listen, 2 to see more info, 3 to add it to a playlist, and q to exit.")
 
         choice = input()
 
@@ -422,7 +426,7 @@ def songActions(uid, sno, sid):
             continue
 
 
-        elif (choice == '4'):
+        elif (choice == 'q'):
             print("Exiting:")
             break
 
