@@ -33,14 +33,13 @@ def userMenu(uid, con, cur):
                 continue
             sno = addSession(uid)
 
-
-        elif (x == '3'):
-            print('Provide a keyword for artist name, or song they performed, seperated by space:')
+        elif (x == '2'):
+            print("Enter space separated keywords you'd like to search by ! (e.g 'Fun Songs')")
             keywords = input()
-            results = findArtist(keywords)
             if keywords == '':
-                print("Please give an input.")
+                print("Enter an input properly !")
                 continue
+            results = spSearch(keywords)
             if len(results) > 5:
                 for i in range(5):
                     print(results[i][0] + ", " + results[i][1] + ", " + results[i][2]) #if you want the # of matches, use [3]
@@ -51,34 +50,114 @@ def userMenu(uid, con, cur):
                     for result in results:
                         print(result[0] + ", " + result[1] + ", " + result[2])
                 elif (y.upper() == 'N'):
+                    print('Oh well whatever !')
+                else:
+                    print("Y or N bozo ! You don't get to see the rest then !")
+                    # could maybe have this loop. i say just leave it
+            else:
+                for result in results:
+                    print(result[0] + ", " + result[1] + ", " + result[2])
+                    
+            while(1):
+                print("Select a song to start performing actions (Give sid). Or, if you want to select a playlist, enter 'P(PID)'. ex: playlist with PID:0, enter 'P0'. Enter '4' to quit.")
+
+                songSelected = input().lower()
+
+                if songSelected == "":
+                    print("Please give an input.")
+                    continue
+                elif songSelected == '4':
+                    print("Exiting:")
+                    break
+                elif songSelected[0] == 'p':
+                    hasPlaylist = 0
+                    for result in results:
+                        if result[0][0].lower() == 'p' and songSelected[1] == result[0][13:]:
+                            hasPlaylist = hasPlaylist + 1
+                            playlists = getSongsPlaylist(songSelected[1])
+                            while(1):
+                                for result in playlists:
+                                    print(result[0] + ", " + result[1] + ", " + result[2])
+                                print("Select a song to start performing actions (Give sid). Enter '4' to quit.")
+
+                                songSelected = input()
+
+                                if songSelected == "":
+                                    print("Please give an input.")
+                                    continue
+                                elif songSelected == '4':
+                                    print("Exiting:")
+                                    break
+                                foundSong = 0
+                                for resultSong in playlists:
+                                    if songSelected == resultSong[0][9:]:
+                                        foundSong = foundSong + 1
+                                        songActions(uid, sno, songSelected)
+                                        break
+                                if foundSong == 0:
+                                    print("Song/Playlist not found. Please enter a proper ID within the list of songs/playlists returned.")
+                                continue
+                            break
+
+
+
+                foundSong = 0
+                for resultSong in results:
+                    if songSelected == resultSong[0][9:]:
+                        foundSong = foundSong + 1
+                        songActions(uid, sno, songSelected)
+                        break
+                if foundSong == 0:
+                    print("Song not found. Please enter a proper ID within the list of songs returned.")
+                continue
+            print("")
+
+        elif (x == '3'):
+            print('Provide a keyword for artist name, or song they performed, seperated by space:')
+            keywords = input()
+            results = findArtist(keywords)
+            if keywords == '':
+                print("Please give an input.")
+                continue
+            if len(results) > 5:
+                for i in range(5):
+                    print("Index: " + str(i) + " " + results[i][0] + ", " + results[i][1] + ", " + results[i][2]) #if you want the # of matches, use [3]
+                print("There are more than 5 matches ! Do you want to see the rest ? ! ?")
+                y = input('Y or N: ')
+                if (y.upper() == 'Y'):
+                    print('Showing all results ! :')
+                    i - 0
+                    for result in results:
+                        print(" Index: " + str(i) + " " + result[0] + ", " + result[1] + ", " + result[2])
+                        i = i + 1
+                elif (y.upper() == 'N'):
                     print('Not displaying all the results')
                 else:
                     print("Please select Y or N.")
 
             elif len(results) > 0:
+                i = 0
                 for result in results:
-                    print(result[0] + ", " + result[1] + ", " + result[2])
+                    print(" Index: " + str(i) + " " +  result[0] + ", " + result[1] + ", " + result[2])
+                    i = i + 1
             else:
                 print("No results found!")
                 continue
             while (1):
-                print("Enter an artist's name from selection to see details on songs they performed. Enter 4 to exit.")
-                artistName = input()
-                if artistName == '':
+                print("Enter an index assigned to an artist from selection to see details on songs they performed. Enter 4 to exit.")
+                artistID = input()
+                if artistID == '':
                     print("Please give an input.")
                     continue
-                elif artistName == '4':
+                elif artistID == '4':
                     print("Exiting.")
                     break
                 foundArtist = 0
-                artistNameCap = artistName.lower()
-                for result in results:
-                    thisRes = result[0][6:].lower() 
-                    if artistName == thisRes:
+                for i in range(len(results)):
+                    if artistID == str(i):
                         foundArtist = foundArtist + 1
                         print("Songs:")
-                        getResult = getSongs(artistName)
-
+                        getResult = getSongs(results[i][0][6:])
                         while(1):
                             for result in getResult:
                                 print(result[0] + ", " + result[1] + ", " + result[2])
@@ -102,7 +181,7 @@ def userMenu(uid, con, cur):
                                 print("Song not found. Please enter a proper ID within the list of songs returned.")
                             continue
                 if foundArtist == 0:
-                    print("Artist not found. Please enter a name within the list of artists returned.")
+                    print("Artist not found. Please enter an index assigned to an artist within the list of artists returned.")
                     continue
             
 
@@ -192,6 +271,12 @@ def getSongs(name):
     result = cursor.fetchall()
     return result
 
+def getSongsPlaylist(pid):
+    global connection, cursor
+    cursor.execute('SELECT "Song ID: " || songs.sid, "Title: " || songs.title, "Song Duration: " || songs.duration from songs, plinclude where songs.sid = plinclude.sid and plinclude.pid like ?', (pid,))
+    result = cursor.fetchall()
+    return result
+
 
 def songActions(uid, sno, sid):
     global connection, cursor
@@ -261,12 +346,13 @@ def songActions(uid, sno, sid):
 
             
             results = cursor.fetchall()
+            inPlaylist = 0
+            for result in results:
+                inPlaylist = inPlaylist + 1
+                print(result[0])
 
-            if results[0] is None:
-                print("The song is currently in no playlists.")
-            else:
-                for result in results:
-                    print(result[0])
+            if inPlaylist == 0:
+                print("Currently not in any playlists.")
 
 
             print("Done displaying song info.")
@@ -346,7 +432,48 @@ def songActions(uid, sno, sid):
             continue
 
 
+def spSearch(input):
+    global connection, cursor
+    temp = (input.lower()).split()
+    temp2 = ['%' + t + '%' for t in temp]
+    keywords = tuple(temp2)
+    query1 = "SELECT 'Song ID: ' || sid, title, 'Duration: ' || duration || ' seconds', "
+    final1= " FROM songs GROUP BY sid, title, duration HAVING matches > 0 ORDER BY matches DESC;"
+    
+    for keyword in keywords:
+        query1 += "(title LIKE ?)"
+        if keyword is not keywords[-1]:
+            query1+= '+'
 
+    query1+=' AS matches' + final1
+
+    cursor.execute(query1, keywords)
+    results1 = cursor.fetchall()
+
+    query2 = """
+    SELECT 'Playlist ID: ' || p.pid, p.title, 'Total Duration: ' || SUM(s.duration) || ' seconds', """
+
+    final = """
+     FROM playlists p, plinclude pl, songs s
+    WHERE p.pid = pl.pid
+    AND pl.sid = s.sid
+    GROUP BY p.pid, p.title
+    HAVING matches > 0
+    ORDER BY matches DESC;
+    """
+    for keyword in keywords:
+        query2 += "(p.title LIKE ?)"
+        if keyword is not keywords[-1]:
+            query2+= '+'
+
+    query2+='AS matches' + final
+
+    cursor.execute(query2, keywords)
+    results2 = cursor.fetchall()
+    
+    results = results1 + results2
+    results.sort(key=lambda tup: tup[3], reverse=True)
+    return results
 
         #  Song actions: When a song is selected, the user can perform any of these actions: (1) listen to it, (2) see more information about it, or (3) add it to a playlist. 
         # More information for a song is the names of artists who performed it in addition to id, title and duration of the song as well as the names of playlists the song is in (if any). 

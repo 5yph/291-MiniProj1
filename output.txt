@@ -180,6 +180,7 @@ FROM playlists;
 37|bruhland|u0
 38|de|u0
 39|princelordbruhland|u0
+40|bruhd|u0
 
 
 -- Test playlist includes
@@ -190,6 +191,7 @@ WHERE plinclude.sid = songs.sid and plinclude.pid = '36';
 36|1|4|1|Waka Waka(This Time For Africa)|202
 36|6|5|6|Just Give Me a Reason|242
 36|31|3|31|International Love|227
+36|40|6|40|On the Floor|231
 36|41|2|41|I Feel It Coming|269
 36|51|1|51|Peaches|198
 -- -- Test sessions
@@ -206,21 +208,23 @@ u0|7|2022-11-02 21:11:13|
 u0|8|2022-11-02 21:29:19|
 u0|9|2022-11-02 21:36:41|
 u0|10|2022-11-02 21:44:32|
+u0|11|2022-11-02 21:51:01|
+u0|12|2022-11-02 21:57:36|
+u0|13|2022-11-02 22:03:22|
+u0|14|2022-11-02 23:52:51|
+u0|15|2022-11-03 00:08:35|
+u0|16|2022-11-03 00:08:52|
 -- 
 
 SELECT *
-FROM listen
-where listen.uid = 'u0';
-u0|1|40|2.0
-u0|2|6|1.0
-u0|3|31|1.0
-u0|4|29|2.0
-u0|5|51|1.0
-u0|6|51|1.0
-u0|7|6|2.0
-u0|8|1|2.0
-u0|9|6|2.0
-u0|10|40|5.0
+FROM plinclude
+where plinclude.pid = '2';
+2|5|2
+2|8|1
+2|15|3
+2|17|4
+2|19|5
+2|39|6
 
 -- get song shit
 -- SELECT *

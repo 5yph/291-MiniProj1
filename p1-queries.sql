@@ -30,8 +30,8 @@ WHERE sessions.uid = "u0";
 -- 
 
 SELECT *
-FROM listen
-where listen.uid = 'u0';
+FROM plinclude
+where plinclude.pid = '2';
 
 -- get song shit
 -- SELECT *
