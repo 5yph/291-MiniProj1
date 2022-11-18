@@ -104,7 +104,7 @@ def userMenu(uid, con, cur):
                                 for resultSong in playlists:
                                     if songSelected == resultSong[0][9:]:
                                         foundSong = foundSong + 1
-                                        sno = songActions(uid, sno, songSelected)
+                                        songActions(uid, sno, songSelected)
                                         break
                                 if foundSong == 0:
                                     print("Song/Playlist not found. Please enter a proper ID within the list of songs/playlists returned.")
@@ -115,7 +115,7 @@ def userMenu(uid, con, cur):
                     for resultSong in results:
                         if songSelected == resultSong[0][9:]:
                             foundSong = foundSong + 1
-                            sno = songActions(uid, sno, songSelected)
+                            songActions(uid, sno, songSelected)
                             break
                     if foundSong == 0:
                         print("Song not found. Please enter a proper ID within the list of songs returned.")
@@ -192,7 +192,7 @@ def userMenu(uid, con, cur):
                             for resultSong in getResult:
                                 if songSelected == resultSong[0][9:]:
                                     foundSong = foundSong + 1
-                                    sno = songActions(uid, sno, songSelected)
+                                    songActions(uid, sno, songSelected)
                                     break
                             if foundSong == 0:
                                 print("Song not found. Please enter a proper ID within the list of songs returned.")
@@ -462,7 +462,7 @@ def songActions(uid, sno, sid):
 
         elif (choice == 'q'):
             print("Exiting:")
-            return sno
+            break
 
         else:
 
